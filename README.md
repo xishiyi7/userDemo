@@ -1,6 +1,6 @@
-# userDemo
-# xishi7
-# 2015/11/17
+# userDemo #
+## made by xishi7 ##
+## on 2015/11/17 ##
 
 ### 工程启动
 
@@ -32,9 +32,26 @@
 > 5. README.md -- 工程描述文件
 
 ### mongodb数据库处理
-- a. 首先利用mongodb创建数据库demo
+- a. 首先开启mongodb服务并连接数据库：
+	```
+		cd bin 进入mongodb文件夹的bin目录
+		输入mongod -dapath ../data/db 连接bin同级目录的data/db的数据库
+	```
+- b. 利用mongodb创建数据库demo
 	```
 		use demo
 	```
-- b. 新建表user
-- c. 插入name、password字段
+- c. 新建表user
+	```
+		db.user.XXX 只要用user操作 会默认新建user表
+	```
+- d. 插入name、password字段
+	```
+		db.user.insert(
+			{name:"XX",password:"YY"}
+		)	// 插入的数据类似于json/object
+	```
+- e. 查看插入的结果
+	```
+		db.user.find()
+	```
