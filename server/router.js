@@ -4,14 +4,77 @@
 
 var user = require('./models/user').user;
 
-function route(handle,pathname,res,params,req){
+function route(handle, pathname, res, params, req) {
 
-	if (pathname=='user'){
+	if (req.method == 'POST') {
+		var data = {
+			name    : params.PARAM.split('|')[0],
+			password: params.PARAM.split('|')[1]
+		};
+		// 添加一条数据
+		user.create(data, function (err, data) {
+			res.setHeader('Access-Control-Allow-Origin', '*');
+			res.setHeader('Access-Control-Allow-Headers', 'authId, Origin, X-Requested-With, Content-Type, Accept');
+			res.setHeader('Access-Control-Expose-Headers', 'authId, Origin, Content-Type');
+			// 明确指定允许访问类型，否则浏览器在执行post和put时会不成功
+			res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+			res.setHeader('Access-Control-Max-Age', '3628800');
+			// 增加缓冲相关信息
+			res.setHeader('Content-Type', 'application/json;charset=utf-8');
+			res.writeHead(200, {'Content-Type': 'application/json'});
+			res.write(JSON.stringify({"data": "add a line"}));
+			res.end();
+		});
+	}
+	// 编辑一条数据
+	else if (req.method == 'PUT') {
+		var tmp = unescape(pathname);
+		params = tmp.split('/')[1];
+
+		var data = {
+			name    : params.split('|')[0],
+			password: params.split('|')[1]
+		};
+		user.update({name: data.name}, {$set: {password: data.password}}, function (err, data) {
+			res.setHeader('Access-Control-Allow-Origin', '*');
+			res.setHeader('Access-Control-Allow-Headers', 'authId, Origin, X-Requested-With, Content-Type, Accept');
+			res.setHeader('Access-Control-Expose-Headers', 'authId, Origin, Content-Type');
+			// 明确指定允许访问类型，否则浏览器在执行post和put时会不成功
+			res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+			res.setHeader('Access-Control-Max-Age', '3628800');
+			// 增加缓冲相关信息
+			res.setHeader('Content-Type', 'application/json;charset=utf-8');
+			res.writeHead(200, {'Content-Type': 'application/json'});
+			res.write(JSON.stringify({"data": "update a line"}));
+			res.end();
+		});
+	}
+	// 删除一条数据
+	else if (req.method == 'DELETE') {
+		var data = {
+			name    : params.PARAM.split('|')[0],
+			password: params.PARAM.split('|')[1]
+		};
+		user.remove({name: data.name, password: data.password}, function (err, data) {
+			res.setHeader('Access-Control-Allow-Origin', '*');
+			res.setHeader('Access-Control-Allow-Headers', 'authId, Origin, X-Requested-With, Content-Type, Accept');
+			res.setHeader('Access-Control-Expose-Headers', 'authId, Origin, Content-Type');
+			// 明确指定允许访问类型，否则浏览器在执行post和put时会不成功
+			res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+			res.setHeader('Access-Control-Max-Age', '3628800');
+			// 增加缓冲相关信息
+			res.setHeader('Content-Type', 'application/json;charset=utf-8');
+			res.writeHead(200, {'Content-Type': 'application/json'});
+			res.write(JSON.stringify({"data": "delete a line"}));
+			res.end();
+		})
+	}
+	// 获取所有数据
+	else {
 		var obj = null;
 		var data = '';
-		user.find({},function(e,docs){
-			          obj = {name:docs[0].name,password:docs[0].password};
-			          data = JSON.stringify(obj);
+		user.find({}, function (e, docs) {
+			          var result = JSON.stringify({data: docs});
 			          res.setHeader('Access-Control-Allow-Origin', '*');
 			          res.setHeader('Access-Control-Allow-Headers', 'authId, Origin, X-Requested-With, Content-Type, Accept');
 			          res.setHeader('Access-Control-Expose-Headers', 'authId, Origin, Content-Type');
@@ -21,59 +84,13 @@ function route(handle,pathname,res,params,req){
 			          // 增加缓冲相关信息
 			          res.setHeader('Content-Type', 'application/json;charset=utf-8');
 
-			          res.writeHead(200,{'Content-Type':'application/json'});
-			          res.write(data);
+			          res.writeHead(200, {'Content-Type': 'application/json'});
+			          res.write(result);
 			          res.end();
 		          }
 		);
 	}
-	else{
-		switch(pathname){
-			case 'info/appinfo':
-				res.setHeader('Access-Control-Allow-Origin', '*');
-				res.setHeader('Access-Control-Allow-Headers', 'authId, Origin, X-Requested-With, Content-Type, Accept');
-				res.setHeader('Access-Control-Expose-Headers', 'authId, Origin, Content-Type');
-				// 明确指定允许访问类型，否则浏览器在执行post和put时会不成功
-				res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-				res.setHeader('Access-Control-Max-Age', '30');
-				// 增加缓冲相关信息
-				res.setHeader('Content-Type', 'application/json;charset=utf-8');
-				res.writeHead(200,{'Content-Type':'text/plain,charset=utf-8'});
 
-				res.write('{"title":"demo项目"}');
-				res.end();
-				break;
-			case 'menu':
-				res.setHeader('Cache-Control', 'max-age=30');
-				res.setHeader('Access-Control-Allow-Origin', '*');
-				res.setHeader('Access-Control-Allow-Headers', 'authId, Origin, X-Requested-With, Content-Type, Accept');
-				res.setHeader('Access-Control-Expose-Headers', 'authId, Origin, Content-Type');
-				// 明确指定允许访问类型，否则浏览器在执行post和put时会不成功
-				res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-				res.setHeader('Access-Control-Max-Age', '3628800');
-				// 增加缓冲相关信息
-				res.setHeader('Content-Type', 'application/json;charset=utf-8');
-				res.writeHead(200,{'Content-Type':'application/json'});
-				res.write(JSON.stringify(handle.menu));
-				res.end();
-				break;
-			case'session':
-				res.setHeader('Access-Control-Allow-Origin', '*');
-				res.setHeader('Access-Control-Allow-Headers', 'authId, Origin, X-Requested-With, Content-Type, Accept');
-				res.setHeader('Access-Control-Expose-Headers', 'authId, Origin, Content-Type');
-				// 明确指定允许访问类型，否则浏览器在执行post和put时会不成功
-				res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-				res.setHeader('Access-Control-Max-Age', '30');
-				// 增加缓冲相关信息
-				res.setHeader('Content-Type', 'application/json;charset=utf-8');
-				res.writeHead(200,{'Content-Type':'text/plain'});
-				res.write(handle.session);
-				res.end();
-				break;
-			default :
-				break;
-		}
-	}
 }
 
 exports.route = route;

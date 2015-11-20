@@ -6,12 +6,28 @@
   <link rel = "stylesheet" href = "lib/bootstrap.css"/>
 </head>
 <body ng-app="myApp" ng-controller="DemoUserCtrl">
-<p class="label-success">{{name}}</p>
-<p class="label-success">{{password}}</p>
-<input type = "text" ng-model="name"/>
-<input type = "text" ng-model="password"/>
-<button ng-click="add()" class="btn btn-success">add</button>
+<p><label class="label-success">{{name}}</label><label class="label-success">{{password}}</label></p>
 
+<div>
+  <input type = "text" ng-model="name"/>
+  <input type = "text" ng-model="password"/>
+  <button ng-click="add()" class="btn btn-success">add</button>
+</div>
+<div ng-repeat="item in allItem">
+<input type = "text" ng-model="item.name"/>
+<input type = "text" ng-model="item.password"/>
+</div>
+
+<div>
+<input type = "text" ng-model="addName"/>
+<input type = "text" ng-model="addPassword"/>
+<button ng-click="edit()" class="btn btn-success">edit</button>
+</div>
+<div>
+  <input type = "text" ng-model="delName"/>
+  <input type = "text" ng-model="delPassword"/>
+  <button ng-click="delete()" class="btn btn-success">delete</button>
+</div>
 <script src = "lib/angular.js"></script>
 <script src = "lib/angular-resource.js"></script>
 <script src = "app.js"></script>

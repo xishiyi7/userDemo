@@ -3,34 +3,48 @@
  */
 
 angular.module('myApp', ['ngResource'])
-	.controller('DemoUserCtrl', function ($scope, $resource,demoRest,demoFilter) {
+	.controller('DemoUserCtrl', function ($scope, $resource, demoGet, demoAdd) {
 
-	                /*demoRest.get(function (result){
-		                $scope.name = result.name;
-		                $scope.password = result.password;
-		                console.log(result.name);
-	                });*/
-	                demoFilter.get({ID:'1'},{name:$scope.name,password:$scope.password},function (result){
-		               console.log('ID=1:'+result.name);
-	                });
+		            // init
+		            demoGet.get(function (result) {
+			            $scope.allItem = result.data;
+		            });
 
+		            // add
 		            $scope.add = function () {
-			            demoRest.add({name:$scope.name,password:$scope.password}, function (result) {
-				            console.log('add');
+			            demoAdd.add({PARAM: $scope.name + '|' + $scope.password}, {
+				            xx: 'xxx',
+				            yy: 'yyy'
+			            }, function (result) {
+				            window.location = window.location;
 			            });
 		            };
+
+		            // edit
+		            $scope.edit = function () {
+			            demoAdd.edit({PARAM: $scope.addName + '|' + $scope.addPassword}, function (result) {
+				            window.location = window.location;
+			            });
+		            }
+
+		            // delete
+		            $scope.delete = function () {
+			            demoAdd.delete({PARAM: $scope.delName + '|' + $scope.delPassword}, function (result) {
+				            window.location = window.location;
+			            });
+		            }
 
 	            })
 	// 全局常量
 	.constant('GLOBAL_ARG', {
 		          serverAddress: 'http://127.0.0.1:8888/rest/'
 	          })
-	 // 可以用ID来过滤
-	.factory('demoFilter',function(demoResourceFactory){
-	            return demoResourceFactory('user/:id',{id:'@ID'});
-             })
-	// rest服务
-	.factory('demoRest',function(demoResourceFactory){
+	// rest服务:add 暂时通过参数传递数据
+	.factory('demoAdd', function (demoResourceFactory) {
+		         return demoResourceFactory('user/:param', {param: '@PARAM'});
+	         })
+	// rest服务:get
+	.factory('demoGet', function (demoResourceFactory) {
 		         return demoResourceFactory('user');
 	         })
 	// resource封装
