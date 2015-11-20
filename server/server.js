@@ -14,8 +14,7 @@ function start(route,handle){
 		if(req.url === '/favicon.ico'){
 			return;
 		}
-
-		var serviceName = url.parse(req.url).pathname.split('rest/')[1];
+		var serviceName = url.parse(req.url).pathname.split('/rest/')[1];
 
 		route(handle,serviceName,res,params,req);
 
