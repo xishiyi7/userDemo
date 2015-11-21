@@ -34,6 +34,20 @@ angular.module('myApp', ['ngResource'])
 			            });
 		            }
 
+	                // search
+	                $scope.search = function() {
+		                var filter = {};
+		                if ($scope.someUser){
+			                angular.extend(filter,{name:$scope.someUser});
+		                }
+		                if ($scope.somePwd){
+			                angular.extend(filter,{password:$scope.somePwd});
+		                }
+		                demoGet.get(filter,function(result){
+			                $scope.allItem = result.data;
+		                });
+	                }
+
 	            })
 	// 全局常量
 	.constant('GLOBAL_ARG', {

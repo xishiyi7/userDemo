@@ -71,9 +71,13 @@ function route(handle, pathname, res, params, req) {
 	}
 	// 获取所有数据
 	else {
-		var obj = null;
-		var data = '';
-		user.find({}, function (e, docs) {
+		var filter = {};
+
+		// 带过滤条件的查询
+		if (params){
+			filter = params;
+		}
+		user.find(filter, function (e, docs) {
 			          var result = JSON.stringify({data: docs});
 			          res.setHeader('Access-Control-Allow-Origin', '*');
 			          res.setHeader('Access-Control-Allow-Headers', 'authId, Origin, X-Requested-With, Content-Type, Accept');
