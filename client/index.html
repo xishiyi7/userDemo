@@ -2,10 +2,12 @@
 <html>
 <head lang = "en">
   <meta charset = "UTF-8">
-  <title>index</title>
-  <link rel = "stylesheet" href = "lib/bootstrap.css"/>
+  <title>userDemo</title>
+  <link rel = "stylesheet" href = "lib/bootstrap/dist/css/bootstrap.css"/>
+  <link rel="shortcut icon" href="res/img/icon.jpeg" type="image/x-icon">
 </head>
 <body ng-app="myApp" ng-controller="DemoUserCtrl">
+
 <p><label class="label-success">{{name}}</label><label class="label-success">{{password}}</label></p>
 
 <div>
@@ -28,6 +30,11 @@
   <input type = "text" ng-model="delPassword"/>
   <button ng-click="delete()" class="btn btn-success">delete</button>
 </div>
+<div>
+  <input type = "text" ng-model="userName"/>
+  <input type = "text" ng-model="userPwd"/>
+</div>
+
 <script src = "lib/angular.js"></script>
 <script src = "lib/angular-resource.js"></script>
 <script src = "app.js"></script>
