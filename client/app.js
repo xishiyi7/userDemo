@@ -5,9 +5,14 @@
 angular.module('myApp', ['ngResource'])
 	.controller('DemoUserCtrl', function ($scope, $resource, demoGet, demoAdd) {
 
+	               // filter for search/delete/edit
+	               var filter = {};
+
 		            // init
 		            demoGet.get(function (result) {
 			            $scope.allItem = result.data;
+		            },function (){
+			            console.log('get error');
 		            });
 
 		            // add
@@ -17,6 +22,8 @@ angular.module('myApp', ['ngResource'])
 				            yy: 'yyy'
 			            }, function (result) {
 				            window.location = window.location;
+			            }, function (){
+				            console.log('add error');
 			            });
 		            };
 
@@ -24,6 +31,8 @@ angular.module('myApp', ['ngResource'])
 		            $scope.edit = function () {
 			            demoAdd.edit({PARAM: $scope.addName + '|' + $scope.addPassword}, function (result) {
 				            window.location = window.location;
+			            },function (){
+				            console.log('edit error');
 			            });
 		            }
 
@@ -31,12 +40,13 @@ angular.module('myApp', ['ngResource'])
 		            $scope.delete = function () {
 			            demoAdd.delete({PARAM: $scope.delName + '|' + $scope.delPassword}, function (result) {
 				            window.location = window.location;
+			            },function (){
+				            console.log('delete error');
 			            });
 		            }
 
 	                // search
 	                $scope.search = function() {
-		                var filter = {};
 		                if ($scope.someUser){
 			                angular.extend(filter,{name:$scope.someUser});
 		                }
@@ -45,6 +55,10 @@ angular.module('myApp', ['ngResource'])
 		                }
 		                demoGet.get(filter,function(result){
 			                $scope.allItem = result.data;
+			                filter = {};
+		                },function (){
+			                console.log('search error');
+			                filter = {};
 		                });
 	                }
 
